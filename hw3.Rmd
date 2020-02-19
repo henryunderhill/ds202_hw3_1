@@ -1,0 +1,97 @@
+---
+title: "DS202 HW3"
+Name: "Henry Underhill"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#reading in data
+```{r}
+data(tips, package="reshape2")
+library(ggplot2)
+```
+Question 1
+The waiter served 244 parties.
+```{r}
+numParty <- nrow(tips)
+numParty
+```
+
+Question 2
+Based on the head output, we see the following types:
+
+Total Bill: Double
+Tip: Double
+Sex: Factor/Categorical
+Smoker: Factor/Categorical
+Day: Factor/Categorical
+Time: Factor/Categorical
+Size: Integer
+```{r}
+summary(tips)
+head(tips)
+```
+
+Question 3
+
+```{r}
+day <- tips$day
+levels(factor(day, levels=c('Thur', 'Fri', 'Sat', 'Sun')))
+day
+```
+
+Question 4
+
+```{r}
+female5 <- tips[tips$sex == 'Female' & tips$size >= 5, ]
+str(female5)
+female5
+```
+
+Question 5
+
+Based on the chart, we see a heavy concentration points towards the lower left portion of the scatterplot. We see a generally linear trend, where tips increase linearlly with total bill. There are a few potential outliers in the y-direction, where we see high tips on low total bills, and also low tips on high total bills. 
+
+```{r}
+ggplot(data = tips, aes(x = total_bill, y = tip)) + geom_point()
+```
+Question 6
+
+Some anomalies that we see in the boxplot are some outliers in both the x and y direction. We see that a heavy concentration of points is in the lower left portion of the graph, meaning that we lack constant variance. Also, the trend gets more cluttered as the total_bill increases, showing a further increase in variability. These mean that our plot does not show a consistent set of points, distributed evenly among the graph. This means that a heavy concentration of points are in one portion of the graph. 
+
+
+Question 7
+
+The average tip rate is a 16.08% tip on the total bill. 
+
+```{r}
+tiprate <- tips$tip / tips$total_bill
+summary(tiprate)
+```
+
+Question 8
+
+We see that dinner time tends to possess more potential outliers in the positive direction for tip rate. Lunch appears to be more consistenty high, however, as the IQR for lunch is higher and narrower than dinner. Dinner also has lower values in its range. Lunch appears to offer consistent tip rates, whereas dinner offers hit or miss tip rates. 
+
+```{r}
+ggplot(data = tips, aes(x = time, y = tiprate)) + geom_boxplot() + coord_flip()
+```
+
+Question 9
+
+Based on the following visual, it appears that average tips are higher for those of non-smoking status. We can aslo see that smokers tend to tip inconsistently, with higher variability. Regarding sex, it appears that males typically offer a higher tip rate for non-smokers, while the numbers are similar for smokers. 
+
+```{r}
+ggplot(data = tips, aes(x = total_bill, y  = tip, color = sex)) + geom_point() + facet_wrap(~smoker)
+```
+
+Question 10
+
+Based on the chart, we see that Friday is far and away the day of the least customers. We also see Thursday as the day with the highest female payers. On the weekend, it appears the mostly males are paying, with higher rates of customers as well. 
+
+```{r}
+ggplot(data = tips, aes(x = day, fill = sex)) + geom_bar()
+```
